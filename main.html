@@ -80,6 +80,21 @@
         th {
             background-color: #f2f2f2;
         }
+        .help-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .help-section img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .help-caption {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -127,9 +142,6 @@
             <input type="number" id="subject1" min="0" max="20" step="0.01" placeholder="" required>
         </div>
 
-
-
-
         <button type="submit">Calculer moyenne</button>
     </form>
 
@@ -159,6 +171,12 @@
             </tr>
             </tfoot>
         </table>
+    </div>
+
+    <!-- Added help section with image and French caption -->
+    <div class="help-section">
+        <p class="help-caption">Example de notes, use these, not each matiere seperately</p>
+        <img src="firefox_AX13YGPGt1.png" alt="Exemple de relevé de notes">
     </div>
 </div>
 
