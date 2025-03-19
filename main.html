@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur de moyenne</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9f7ef;
+            border-radius: 4px;
+            display: none;
+        }
+        .subject-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .coefficient {
+            color: #666;
+            font-size: 0.9em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Grade Calculator</h1>
+
+    <form id="gradeForm">
+        <div class="form-group">
+            <div class="subject-info">
+                <label for="subject2">Logique et multimédia</label>
+                <span class="coefficient">Coefficient: 3</span>
+            </div>
+            <input type="number" id="subject2" min="0" max="20" step="0.01" placeholder="" required>
+        </div>
+
+        <div class="form-group">
+            <div class="subject-info">
+                <label for="subject4">Mathématiques 1</label>
+                <span class="coefficient">Coefficient: 3</span>
+            </div>
+            <input type="number" id="subject4" min="0" max="20" step="0.01" placeholder="" required>
+        </div>
+
+        <div class="form-group">
+            <div class="subject-info">
+                <label for="subject5">Unité transversale</label>
+                <span class="coefficient">Coefficient: 2</span>
+            </div>
+            <input type="number" id="subject5" min="0" max="20" step="0.01" placeholder="" required>
+        </div>
+
+        <div class="form-group">
+            <div class="subject-info">
+                <label for="subject3">Algorithmique et programmation 1</label>
+                <span class="coefficient">Coefficient: 3.5</span>
+            </div>
+            <input type="number" id="subject3" min="0" max="20" step="0.01" placeholder="" required>
+        </div>
+
+        <div class="form-group">
+            <div class="subject-info">
+                <label for="subject1">Systémes d'exploitation et architecture</label>
+                <span class="coefficient">Coefficient: 3.5</span>
+            </div>
+            <input type="number" id="subject1" min="0" max="20" step="0.01" placeholder="" required>
+        </div>
+
+
+
+
+        <button type="submit">Calculer moyenne</button>
+    </form>
+
+    <div class="result" id="result">
+        <h2>Results</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Libelle</th>
+                <th>Note</th>
+                <th>Coef</th>
+                <th>Weighted</th>
+            </tr>
+            </thead>
+            <tbody id="resultTable">
+            <!-- Results will be inserted here -->
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="2"><strong>Total Coefficient:</strong></td>
+                <td id="totalCoef">15</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="3"><strong>Moyenne generale:</strong></td>
+                <td id="overallAverage"></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.getElementById('gradeForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Get values from inputs
+        const grades = [
+            parseFloat(document.getElementById('subject1').value),
+            parseFloat(document.getElementById('subject2').value),
+            parseFloat(document.getElementById('subject3').value),
+            parseFloat(document.getElementById('subject4').value),
+            parseFloat(document.getElementById('subject5').value)
+        ];
+
+        // Subject names and coefficients
+        const subjects = [
+            { name: "Systémes d'exploitation et architecture", coef: 3.5 },
+            { name: "Logique et multimédia", coef: 3 },
+            { name: "Algorithmique et programmation 1", coef: 3.5 },
+            { name: "Mathématiques 1", coef: 3 },
+            { name: "Unité transversale", coef: 2 }
+        ];
+
+        // Calculate weighted sum and total coefficient
+        let weightedSum = 0;
+        let totalCoef = 0;
+
+        const resultTable = document.getElementById('resultTable');
+        resultTable.innerHTML = '';
+
+        // Generate table rows and calculate sum
+        for (let i = 0; i < subjects.length; i++) {
+            const weighted = grades[i] * subjects[i].coef;
+            weightedSum += weighted;
+            totalCoef += subjects[i].coef;
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                    <td>${subjects[i].name}</td>
+                    <td>${grades[i].toFixed(2)}</td>
+                    <td>${subjects[i].coef}</td>
+                    <td>${weighted.toFixed(2)}</td>
+                `;
+            resultTable.appendChild(row);
+        }
+
+        const overallAverage = weightedSum / totalCoef;
+        document.getElementById('overallAverage').textContent = overallAverage.toFixed(2);
+        document.getElementById('totalCoef').textContent = totalCoef;
+
+        // Show results
+        document.getElementById('result').style.display = 'block';
+    });
+</script>
+</body>
+</html>
